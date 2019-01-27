@@ -21,7 +21,7 @@ int main(){
         err=purpose-actual;                             // 获取当前的误差
         errSum+=err;                                    // 误差积分
         power=p*err+i*errSum+k*(err-errLast);           // pid算法 计算功率
-        actual=power/3-222;                             // 当前值和功率的关系，本行代码仅作现实情况的模拟。在实际情况中，actual应该由传感器得到。
+        actual+=power*2-222;                             // 当前值和功率的关系，本行代码仅作现实情况的模拟。在实际情况中，actual应该由传感器得到。
     }
 
     printf("\n目标值 : %f\n",purpose);
