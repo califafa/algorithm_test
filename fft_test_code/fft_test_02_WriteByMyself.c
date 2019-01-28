@@ -20,6 +20,8 @@ typedef struct{
 
 unsigned int pLen=WnLen*2/len;
 
+//N个Wn旋转子最适合2*N个点的FFT
+
 const C Wn_16[16]={
     { 1.0 , -0.0 } ,
 { 0.9807852804032304 , -0.19509032201612825 } ,
