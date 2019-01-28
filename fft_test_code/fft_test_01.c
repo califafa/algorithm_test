@@ -1,11 +1,10 @@
 #include<stdio.h>
 #include<math.h>
 
-#define log2N 6
+#define log2N 7
+#define len 128
 
-#define len 64
-
-#define Pi 3.1415926
+#define Pi 3.141592653589793
 
 typedef struct{
     double real;
@@ -38,7 +37,7 @@ C mul(C a,C b){
     return c;
 }
 
-void Reverse(){
+void Reverse(){                                                                                       //翻转运算
     for(unsigned int i=0;i<len;i++){
         unsigned int I=i;
         unsigned int R=0;
@@ -55,15 +54,15 @@ void Reverse(){
     }
 }
 
-void ButterflyAlgorithm(){
-    for(unsigned int i=1;i<=len;i<<=1){
-        for(unsigned int j=0;j<(len/(2*i));j++){
-            for(unsigned int k=0;k<i;k++){
-                double tmpCos=cos((Pi/i)*k);
-                double tmpSin=-1*sin((Pi/i)*k);
-                C tmpWn;
-                tmpWn.real=tmpCos;
-                tmpWn.img=tmpSin;
+void ButterflyAlgorithm(){                                                                             //蝶形运算，有log2N级，每级有len/(2*i)组，每组有2*i个。
+    for(unsigned int i=1;i<=len;i<<=1){                                                                //有log2N级
+        for(unsigned int j=0;j<(len/(2*i));j++){                                                       //每级有len/(2*i)组
+            for(unsigned int k=0;k<i;k++){                                                             //每组有2*i个，每组分为2部分。第一部分为前i个，第二部分为后i个。
+                double tmpReal=cos((Pi/i)*k);
+                double tmpImg=-1*sin((Pi/i)*k);
+                C tmpWn;                                                                               //旋转子。在每组里面，实部为0-Pi的cos，虚部为0-Pi的-1*sin，将0-Pi分为i个点。
+                tmpWn.real=tmpReal;
+                tmpWn.img=tmpImg;
 
                 C tmpXw=mul(input[j*2*i+k+i],tmpWn);
 
@@ -79,7 +78,7 @@ void ButterflyAlgorithm(){
     }
 }
 
-void fft(){
+void fft(){                                                                                            //快速傅里叶变换
     Reverse();
     ButterflyAlgorithm();
     for(unsigned int i=0;i<len;i++){
@@ -87,24 +86,63 @@ void fft(){
     }
 }
 
-
+// 在len个点中，如果包含x个正弦周期，就是output[x]为峰值。
 int main(){
 
-    double freq=2;
+    double freq=56 *2*Pi/len;
 
     for(int i=0;i<len;i++){
-        input[i].real=sin(i*freq);
+        input[i].real=cos(i*freq);
     }
 
     fft();
 
+
+    //横着显示频谱
+    double tmpMax=0;
+    printf("\n\n");
     for(int i=0;i<len;i++){
-        
-        for(int lo=0;lo<output[i].real;lo++){
-            printf("x");
+        if(tmpMax<output[i].real){
+            tmpMax=output[i].real;
+        }
+    }
+    for(int i=tmpMax;i>0;i--){
+        for(int j=0;j<len;j++){
+            if(output[j].real>i){
+                printf("H");
+            }else{
+                printf(" ");
+            }
+            if(j==(len/2-1)){
+                printf(" | ");
+            }
         }
         printf("\n");
     }
+    for(int i=0;i<len;i++){
+        printf("%d",i%10);
+        if(i==(len/2-1)){
+            printf(" | ");
+        }
+    }
+
+
+
+
+    //竖着显示频谱
+    /*
+    for(int i=0;i<len;i++){
+        
+        for(int lo=0;lo<output[i].real;lo++){
+            printf("-");
+        }
+        if(i==(len/2-1)){
+            printf("\n\n----------------------------------------------------------------------\n");
+        }
+        printf("\n");
+    }
+    */
+
 
     return 0;
 }
