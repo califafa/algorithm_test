@@ -58,6 +58,40 @@ float* one_Rotation(float*v,float*u){
     return nv;
 }
 
+/******************************************************************************
+  * 函数名称：Q_rsqrt
+  * 函数描述：快速计算 1 / Sqrt(x) 
+  * 输    入：float number:要计算的数据
+  * 输    出：void
+  * 返    回：1 / Sqrt(x) 
+  * 备    注：null
+  *    
+  *
+******************************************************************************/
+float Q_rsqrt(float number)
+{
+    long i;
+    float x2, y;
+    const float threehalfs = 1.5F;
+ 
+    x2 = number * 0.5F;
+    y  = number;
+    i  = *(long*) &y;                      
+    i  = 0x5f3759df - ( i >> 1 );               
+    y  = *(float*) &i;
+    y  = y * (threehalfs - (x2 * y * y ));   // 1st iteration （第一次牛顿迭代）
+    return y;
+}
+
+float* toOne(float*u){
+    float quaSum=u[1]*u[1]+u[2]*u[2]+u[3]*u[3];
+    float rsqrt=Q_rsqrt(quaSum);
+    u[1]=u[1]*rsqrt;
+    u[2]=u[2]*rsqrt;
+    u[3]=u[3]*rsqrt;
+    
+    return u;
+}
 
 int main(){
     float v[3]={2,2,0};     // v[0]=x, v[1]=y, v[2]=z
