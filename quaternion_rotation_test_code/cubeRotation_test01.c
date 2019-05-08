@@ -53,6 +53,9 @@ float* one_Rotation(float*v,float*u){
     float*nv=mutiply_3x1(m,v);
 
     free(q);
+    for(int i=0;i<3;i++){
+        free(m[i]);
+    }
     free(m);
 
     return nv;
@@ -190,13 +193,20 @@ int main(){
     }
 
     cube=cube_Rotation(cube,u);
-    cube=onRetina(cube);
+    float**cubeOnRetina=onRetina(cube);
     printf("\n\n");
 
     for(int i=0;i<8;i++){
         printf("%d      %f  %f  %f \n ",i,cube[i][0],cube[i][1],cube[i][2]);
     }
 
-    print_line(cube);
+    print_line(cubeOnRetina);
+
+    for(int i=0;i<8;i++){
+            free(cubeOnRetina[i]);
+        }
+        free(cubeOnRetina);
+
+
     return 0;
 }
