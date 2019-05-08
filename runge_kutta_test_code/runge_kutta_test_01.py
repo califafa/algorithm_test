@@ -1,3 +1,7 @@
+#此代码包括龙格库塔法和直接相加法的比较
+#可以得出：龙格库塔法的准确度很高
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 
