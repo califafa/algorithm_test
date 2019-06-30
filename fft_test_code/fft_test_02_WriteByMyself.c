@@ -425,13 +425,28 @@ void ButterflyAlgorithm(){
     }
 }
 
-
+float Q_sqrt(float number)
+{
+    long i;
+    float x2, y;
+    const float threehalfs = 1.5F;
+ 
+    x2 = number * 0.5F;
+    y  = number;
+    i  = *(long*) &y;                      
+    i  = 0x5f375a86 - ( i >> 1 );               
+    y  = *(float*) &i;
+    y  = y * (threehalfs - (x2 * y * y ));   // 1st iteration （第一次牛顿迭代）
+    return 1/y;
+}
 
 void fft(){                                                                                            //快速傅里叶变换
     Reverse();
     ButterflyAlgorithm();
     for(unsigned int i=0;i<len;i++){
-        output[i].real=sqrt(input[i].real*input[i].real+input[i].img*input[i].img);
+        printf("%f , ",input[i].real*input[i].real+input[i].img*input[i].img);
+        output[i].real=Q_sqrt(input[i].real*input[i].real+input[i].img*input[i].img);
+        printf("%f                 ",output[i].real);
     }
 }
 

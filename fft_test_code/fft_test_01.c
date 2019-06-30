@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<math.h>
 
-#define log2N 5
-#define len 32
+#define log2N 7
+#define len 128
 
 #define Pi 3.141592653589793
 
@@ -82,7 +82,7 @@ void fft(){                                                                     
     Reverse();
     ButterflyAlgorithm();
     for(unsigned int i=0;i<len;i++){
-        output[i].real=(input[i].real*input[i].real+input[i].img*input[i].img);
+        output[i].real=sqrt(input[i].real*input[i].real+input[i].img*input[i].img);
     }
 }
 
@@ -92,7 +92,7 @@ int main(){
     double freq=56 *2*Pi/len;
 
     for(int i=0;i<len;i++){
-        input[i].real=cos(i*freq)+0.1;
+        input[i].real=cos(i*freq)+cos(i*0.5*freq)+sin(i*freq/8)+1;
     }
 
     fft();
